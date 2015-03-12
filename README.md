@@ -1,7 +1,7 @@
 # CS250 Final Project
-# Willem Yarbrough & Alden Page
+Authors: Willem Yarbrough & Alden Page
 
-## Octree Collision Detection
+## Project Proposal
 
 ### Background
 Collision detection is an important component of any simulation software, and is
@@ -30,12 +30,12 @@ octree data structure, which will be evaluated in the same manner.
 Once this stage of the project is complete, we intend to improve on the
 Octree implementation in some way. Some initial ideas for improvements are:
 
-- Variable partitioning. Octrees typically divide the simulation space into
+- **Variable partitioning.** Octrees typically divide the simulation space into
   exact halves. However, if our objects are clustered at one area in the
   space, this may result in an unbalanced tree. To combat this, the Octree could
   divide the space such that the resultant spaces have even numbers of
   entites.
-- Automatically balancing octrees. Find a way to implement an Octree analog to
+- **Automatically balancing octrees.** Find a way to implement an Octree analog to
   the Red-Black Tree balancing technique. This may be an alternative to the
   previous idea, as it accomplishes the same goal. Thus, if time is available,
   both techniques could be implemented and evaluated.
