@@ -1,7 +1,9 @@
-# CS250 Final Project -- Willem Yarbrough & Alden Page
-# Octree Collision Detection
+# CS250 Final Project
+# Willem Yarbrough & Alden Page
 
-## Background
+## Octree Collision Detection
+
+### Background
 Collision detection is an important component of any simulation software, and is
 vital for such applications as game design, robotics, and physics simulations.
 However, for a large number of objects in a simulation, collision detection can
@@ -17,7 +19,7 @@ with a "quadtree", in which each node has either 0 or 4 children. The quadtree
 divides the simulation space into quadrants. Similarly, for a 3D space, an
 "octree" is used to divide the space into eight discrete spaces.
 
-## Project Goal
+### Project Goal
 Our final project will be an attempt to implement a basic, simple 3D physics
 engine, and design a collision detection module for this engine. This module
 will first use a brute-force collision detection algorithm, which will be
