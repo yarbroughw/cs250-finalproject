@@ -21,11 +21,11 @@ divides the simulation space into quadrants. Similarly, for a 3D space, an
 
 ### Project Goal
 Our final project will be an attempt to implement a basic, simple 3D physics
-engine, and design a collision detection module for this engine. This module
-will first use a brute-force collision detection algorithm, which will be
-evaluated based on its performance (i.e., latency over number of objects).
-We will then proceed by improving this collision detection technique using the
-octree data structure, which will be evaluated in the same manner.
+simulation in Python, and design a collision detection module for this engine.
+This module will first use a brute-force collision detection algorithm, which
+will be evaluated based on its performance (i.e., latency over number of
+objects).  We will then proceed by improving this collision detection technique
+using the octree data structure, which will be evaluated in the same manner.
 
 Once this stage of the project is complete, we intend to improve on the
 Octree implementation in some way. Some initial ideas for improvements are:
@@ -39,3 +39,7 @@ Octree implementation in some way. Some initial ideas for improvements are:
   the Red-Black Tree balancing technique. This may be an alternative to the
   previous idea, as it accomplishes the same goal. Thus, if time is available,
   both techniques could be implemented and evaluated.
+
+Our implementation will be submitted together with analysis of our results, in
+the form of mathematical analysis of the Octree algorithm and our improvement to
+it, as well as experimental evaluations that support our claims.
