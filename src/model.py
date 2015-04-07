@@ -1,3 +1,5 @@
+import random
+
 
 class Particle:
     ''' simple wrapper for coordinate and velocity '''
@@ -7,11 +9,19 @@ class Particle:
 
 
 class World:
-    def __init__(self, xmax, ymax, zmax):
+    def __init__(self, xmax, ymax, zmax, size):
         self.xmax = xmax
         self.ymax = ymax
         self.zmax = zmax
         self.particles = []
+
+        for _ in range(size):
+            coord = (random.randint(0, xmax),
+                     random.randint(0, ymax),
+                     random.randint(0, zmax))
+            velocity = (1, 1, 1)
+            newparticle = Particle(coord, velocity)
+            self.particles.append(newparticle)
 
     def move(self, particle):
         x, y, z = particle.coord
