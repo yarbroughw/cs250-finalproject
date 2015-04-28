@@ -29,7 +29,7 @@ def update_frame(screen):
     # Update the screen
     pygame.display.update()
 
-if __name__ == "__main__":
+def run_sim():
     pygame.init()
     screen = pygame.display.set_mode((1024, 768))
 
