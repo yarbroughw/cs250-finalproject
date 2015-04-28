@@ -2,10 +2,13 @@ import pygame
 import front
 import model
 
+WIN_SIZE = (1024, 768)
+
 def run_sim():
     pygame.init()
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((1024, 768))
+    screen = pygame.display.set_mode(WIN_SIZE)
+    world = model.World(WIN_SIZE[0], WIN_SIZE[1], 10)
     
     # Main loop
     while True:
@@ -14,4 +17,4 @@ def run_sim():
                 pygame.quit()
                 sys.exit()
             front.update_frame(screen)
-            model.step()
+            world.step(None)
