@@ -32,6 +32,9 @@ class Node:
         ll = Node(self.xmin, xmid, ymid, self.ymax)
         self.children = [ul, ur, lr, ll]
 
+    def quadrant(self, particle):
+        pass
+
 
 class Quadtree:
     def __init__(self):
@@ -61,6 +64,9 @@ class BasicDetector:
             if colliding(p1, p2):
                 p1.collide = True
                 p2.collide = True
+            else:
+                p1.collide = False
+                p2.collide = False
 
 
 class QuadtreeDetector:
