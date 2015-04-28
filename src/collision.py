@@ -23,11 +23,11 @@ class Node:
                 self.split()
                 self.add(particle)
             else:
-                self.particles.add(particle)
+                self.particles.append(particle)
         else:
             quadrant = self.quadrant(particle)
             if quadrant < 0:
-                self.particles.add(particle)
+                self.particles.append(particle)
             else:
                 self.children[quadrant].add(particle)
 
@@ -38,6 +38,7 @@ class Node:
         lr = Node(self.xmid, self.xmax, self.ymid, self.ymax)
         ll = Node(self.xmin, self.xmid, self.ymid, self.ymax)
         self.children = [ul, ur, lr, ll]
+        print("Completed split")
 
     def quadrant(self, particle):
         '''Returns index of quadrant for particle in children array.
@@ -98,7 +99,7 @@ class QuadtreeDetector:
         pass
 
     def check(self, world):
-        qt = Quadtree(self.world)
+        qt = Quadtree(world)
         for p in world.particles:
             p.collide = False
         for p in world.particles:
@@ -107,6 +108,6 @@ class QuadtreeDetector:
                 if current.hasColliding(p):
                     p.collide = True
                 if current.children is not None:
-                    current = current.children[qt.quadrant(p)]
+                    current = current.children[current.quadrant(p)]
                 else:
                     break

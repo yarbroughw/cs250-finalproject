@@ -6,20 +6,20 @@ import collision
 
 WIN_SIZE = (1366, 768)
 
-def run_sim(arg):
+def run_sim(arg1, arg2):
     detector = None
-    if arg is 0:
+    if arg1 is 0:
         print("No collision detection enabled.")
-    if arg is 1:
+    if arg1 is 1:
         print("Using brute force collision detection.")
         detector = collision.BasicDetector()
-    if arg is 2:
+    if arg1 is 2:
         print("Using Quadtree collision detection.")
         detector = collision.QuadtreeDetector()
 
     pygame.init()
     clock = pygame.time.Clock()
-    world = model.World(WIN_SIZE[0], WIN_SIZE[1], 50)
+    world = model.World(WIN_SIZE[0], WIN_SIZE[1], arg2)
     screen = pygame.display.set_mode((WIN_SIZE), pygame.FULLSCREEN)
     # Main loop
     while True:
