@@ -16,6 +16,9 @@ def run_sim(arg):
     if arg is 2:
         print("Using Quadtree collision detection.")
         detector = collision.QuadtreeDetector()
+    else:
+        print("Failed to supply arguments.")
+        sys.exit()
 
     pygame.init()
     # clock = pygame.time.Clock()
