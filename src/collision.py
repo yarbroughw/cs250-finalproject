@@ -1,7 +1,7 @@
 import numpy as np
 import itertools as it
 
-P_LIMIT = 5
+P_LIMIT = 10
 
 
 class Node:
@@ -96,10 +96,11 @@ class BasicDetector:
 
 class QuadtreeDetector:
     def __init__(self):
-        pass
+        self.qt = None
 
     def check(self, world):
         qt = Quadtree(world)
+        self.qt = qt
         for p in world.particles:
             p.collide = False
         for p in world.particles:

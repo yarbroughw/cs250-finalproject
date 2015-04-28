@@ -30,5 +30,6 @@ def run_sim(arg1, arg2):
                     pygame.quit()
                     sys.exit()
 
-        front.update_frame(world, screen)
         world.step(detector)
+        front.draw_quad(screen, detector)
+        front.update_frame(world, screen)
