@@ -60,13 +60,12 @@ class BasicDetector:
 
     def check(self, world):
         ''' brute force, n^2 collision detection '''
+        for p in world.particles:
+            p.collide = False
         for (p1, p2) in it.combinations(world.particles, 2):
             if colliding(p1, p2):
                 p1.collide = True
                 p2.collide = True
-            else:
-                p1.collide = False
-                p2.collide = False
 
 
 class QuadtreeDetector:
