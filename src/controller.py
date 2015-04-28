@@ -1,5 +1,6 @@
 import pygame
 import front
+import model
 
 def run_sim():
     pygame.init()
@@ -13,3 +14,4 @@ def run_sim():
                 pygame.quit()
                 sys.exit()
             front.update_frame(screen)
+            model.step()

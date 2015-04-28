@@ -28,15 +28,3 @@ def update_frame(screen):
 
     # Update the screen
     pygame.display.update()
-
-def run_sim():
-    pygame.init()
-    screen = pygame.display.set_mode((1024, 768))
-
-    # Main loop
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-        update_frame(screen)
