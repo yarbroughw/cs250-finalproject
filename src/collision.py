@@ -53,11 +53,18 @@ class Node:
         else:
             return 1 if 0 < particle.coord[1] < self.ymid else 2
 
+    def hasColliding(self, p):
+        for p2 in self.particles:
+            if colliding(p, p2):
+                return True
+        return False
+
 
 class Quadtree:
-    def __init__(self):
-        self.root = None
-        self.splitAt = None
+    def __init__(self, world):
+        self.root = Node(0, world.xmax, 0, world.ymax)
+        for particle in world.particles:
+            self.add(particle)
 
     def add(self, particle):
         self.root.add(particle)
@@ -88,7 +95,18 @@ class BasicDetector:
 
 class QuadtreeDetector:
     def __init__(self):
-        self.tree = Quadtree()
+        pass
 
     def check(self, world):
-        pass
+        qt = Quadtree(self.world)
+        for p in world.particles:
+            p.collide = False
+        for p in world.particles:
+            current = qt.root
+            while True:
+                if current.hasColliding(p):
+                    p.collide = True
+                if current.children is not None:
+                    current = current.children[qt.quadrant(p)]
+                else:
+                    break
