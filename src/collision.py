@@ -38,7 +38,6 @@ class Node:
         lr = Node(self.xmid, self.xmax, self.ymid, self.ymax)
         ll = Node(self.xmin, self.xmid, self.ymid, self.ymax)
         self.children = [ul, ur, lr, ll]
-        print("Completed split")
 
     def quadrant(self, particle):
         '''Returns index of quadrant for particle in children array.
@@ -56,7 +55,8 @@ class Node:
 
     def hasColliding(self, p):
         for p2 in self.particles:
-            if colliding(p, p2):
+            if colliding(p, p2) and not p == p2:
+                p2.collide = True
                 return True
         return False
 
