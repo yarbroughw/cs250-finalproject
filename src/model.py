@@ -22,7 +22,8 @@ class World:
 
         for _ in range(num_particles):
             coord = (random.uniform(0, xmax), random.uniform(0, ymax))
-            velocity = (random.random(), random.random())
+            velocity = (random.random()*2 - 1.0,
+                        random.random()*2 - 1.0)
             newparticle = Particle(coord, velocity)
             self.particles.append(newparticle)
 
@@ -35,7 +36,7 @@ class World:
 
     def boundscheck(self, p):
         # TODO: debug, possibly
-        if not 0 < p.coord[0] < self.xmax:
+        if not (0 + p.radius) < p.coord[0] < (self.xmax - p.radius):
             p.velocity[0] *= -1
-        if not 0 < p.coord[1] < self.ymax:
+        if not (0 + p.radius) < p.coord[1] < (self.ymax - p.radius):
             p.velocity[1] *= -1
