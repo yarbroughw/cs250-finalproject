@@ -16,8 +16,76 @@
   \titlepage
 \end{frame}
 
+% motivation
 \begin{frame}
-    \huge{Example Text}\normalsize
+    \huge{What?}\normalsize
+    \begin{itemize}
+      \item Given 2D particles $p_0$ to $p_n$, which are colliding?
+    \end{itemize} \vspace{0.5cm} \pause
+    \huge{Why?}\normalsize
+    \begin{itemize}
+      \item Simulations
+      \item Games
+    \end{itemize} \vspace{0.5cm} \pause
+    \huge{How?}\normalsize
+    \begin{itemize}
+      \item \texttt{colliding(p1, p2)} primitive, $O(1)$
+      \item Brute-force
+      \item Quadtree
+    \end{itemize}
+\end{frame}
+
+% brute-force solution
+\begin{frame}
+    \huge{Brute-force}\normalsize
+    \begin{itemize}
+      \item Call \texttt{colliding($p_i$, $p_j$)} for each $p_i$, $p_j$.
+      \item Complexity??
+    \end{itemize}
+    \pause
+    \vspace{0.5cm}
+    \begin{center}
+      \huge{$O(n^2)$}\normalsize
+    \end{center}
+\end{frame}
+
+% quadtree
+\begin{frame}
+    \huge{Quadtree}\normalsize
+    \begin{itemize}
+      \item Call \texttt{colliding($p_i$, $p_j$)} for \textit{nearby} $p_i$, $p_j$.
+      \item Subdivide space into quadrants!!
+      \item Complexity??
+    \end{itemize}
+    \pause
+    \vspace{0.5cm}
+    \begin{center}
+      \huge{$O(n \log n)$}\normalsize
+    \end{center}
+\end{frame}
+
+% implementation
+\begin{frame}
+    \huge{Python Implementation}\normalsize
+    \begin{itemize}
+      \item World of particles (location, velocity)
+      \item Brute-force and quadtree ``detectors'' for comparison
+      \item Drawing with Pygame
+    \end{itemize}
+\end{frame}
+
+% other work
+\begin{frame}
+    \huge{Other Stuff}\normalsize
+    \begin{itemize}
+      \item What about 3D? \textbf{Octree}
+      \item What about any D? \textbf{K-D Tree}
+      \item What about polygons? \textbf{BSP Trees}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \huge{Demo!}\normalsize
 \end{frame}
 
 \end{document}
