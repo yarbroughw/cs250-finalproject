@@ -9,7 +9,7 @@ blue = (138, 255, 255)
 orange = (255, 170, 51)
 
 
-def draw_circ(circle, color, screen)
+def draw_circ(circle, color, screen):
     '''A nice wrapper for pygame's ugly-ass draw syntax. '''
     pygame.gfxdraw.filled_circle(screen, c.coord[0], c.coord[1], c.radius, color)
 
