@@ -49,3 +49,23 @@ def colliding(p1, p2):
     ''' returns true if particles are colliding '''
     distance = np.linalg.norm(p1.coord - p2.coord)
     return p1.radius + p2.radius >= distance
+
+
+class BasicDetector:
+    def __init__(self):
+        pass
+
+    def check(self, world):
+        ''' brute force, n^2 collision detection '''
+        for (p1, p2) in it.combinations(world.particles, 2):
+            if colliding(p1, p2):
+                p1.collide = True
+                p2.collide = True
+
+
+class QuadtreeDetector:
+    def __init__(self):
+        self.tree = Quadtree()
+
+    def check(self, world):
+        pass
