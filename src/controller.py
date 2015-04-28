@@ -4,7 +4,6 @@ import front
 import model
 import collision
 
-WIN_SIZE = (1366, 768)
 
 def run_sim(arg1, arg2):
     detector = None
@@ -19,6 +18,8 @@ def run_sim(arg1, arg2):
 
     pygame.init()
     clock = pygame.time.Clock()
+    res_info = pygame.display.Info()
+    WIN_SIZE = (res_info.current_w, res_info.current_h)
     world = model.World(WIN_SIZE[0], WIN_SIZE[1], arg2)
     screen = pygame.display.set_mode((WIN_SIZE), pygame.FULLSCREEN)
     # Main loop

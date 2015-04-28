@@ -1,7 +1,7 @@
 import numpy as np
 import itertools as it
 
-P_LIMIT = 10
+P_LIMIT = 1
 
 
 class Node:
