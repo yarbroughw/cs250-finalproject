@@ -7,8 +7,9 @@ def update_frame(screen):
     # Draw the background
     screen.fill((255, 255, 255))
     
-    # Draw everything else
-    # For object in screenbuff:
+    # Draw all of the circles
+    for circle in controller.world:
+
 
     # Update the screen
     pygame.display.update()
