@@ -4,7 +4,7 @@ import front
 import model
 import collision
 
-WIN_SIZE = (1024, 768)
+WIN_SIZE = (1366, 768)
 
 def run_sim(arg):
     detector = None
@@ -16,19 +16,19 @@ def run_sim(arg):
     if arg is 2:
         print("Using Quadtree collision detection.")
         detector = collision.QuadtreeDetector()
-    else:
-        print("Failed to supply arguments.")
-        sys.exit()
 
     pygame.init()
-    # clock = pygame.time.Clock()
+    clock = pygame.time.Clock()
     world = model.World(WIN_SIZE[0], WIN_SIZE[1], 50)
-    screen = pygame.display.set_mode(WIN_SIZE)
+    screen = pygame.display.set_mode((WIN_SIZE), pygame.FULLSCREEN)
     # Main loop
     while True:
+        clock.tick(60)
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
         front.update_frame(world, screen)
         world.step(detector)
