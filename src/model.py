@@ -15,15 +15,17 @@ class Particle:
 
 
 class World:
+
     def __init__(self, xmax, ymax, num_particles):
         self.xmax = xmax
         self.ymax = ymax
         self.particles = []
+        maxspeed = 2.0
 
         for _ in range(num_particles):
             coord = (random.uniform(0, xmax), random.uniform(0, ymax))
-            velocity = (random.random()*2 - 1.0,
-                        random.random()*2 - 1.0)
+            velocity = (random.uniform(-1, 1) * maxspeed,
+                        random.uniform(-1, 1) * maxspeed)
             newparticle = Particle(coord, velocity)
             self.particles.append(newparticle)
 
