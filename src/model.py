@@ -7,7 +7,8 @@ class Particle:
     def __init__(self, coord, velocity):
         self.coord = np.array(coord)
         self.velocity = np.array(velocity)
-        self.radius = random.randint(5, 15)
+        # self.radius = random.randint(5, 15)
+        self.radius = 10
         self.collide = False
 
     def move(self):
