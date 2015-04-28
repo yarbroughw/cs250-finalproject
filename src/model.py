@@ -8,6 +8,7 @@ class Particle:
         self.coord = np.array(coord)
         self.velocity = np.array(velocity)
         self.radius = 10
+        self.collide = False
 
     def move(self):
         self.coord += self.velocity
