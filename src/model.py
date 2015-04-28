@@ -15,17 +15,27 @@ class Particle:
 
 
 class World:
-    def __init__(self, xmax, ymax, size):
+    def __init__(self, xmax, ymax, num_particles):
         self.xmax = xmax
         self.ymax = ymax
         self.particles = []
 
-        for _ in range(size):
-            coord = (random.randint(0, xmax), random.randint(0, ymax))
+        for _ in range(num_particles):
+            coord = (random.uniform(0, xmax), random.uniform(0, ymax))
             velocity = (random.random(), random.random())
             newparticle = Particle(coord, velocity)
             self.particles.append(newparticle)
 
-    def step(self):
+    def step(self, detector=None):
         for p in self.particles:
             p.move()
+            self.boundscheck(p)
+        if detector:
+            detector.check(self)
+
+    def boundscheck(self, p):
+        # TODO: debug, possibly
+        if not 0 < p.coord[0] < self.xmax:
+            p.velocity[0] *= -1
+        if not 0 < p.coord[1] < self.ymax:
+            p.velocity[1] *= -1
