@@ -14,26 +14,44 @@ class Node:
         self.xmax = xmax
         self.ymin = ymin
         self.ymax = ymax
+        self.xmid = (self.xmin + self.xmax) // 2
+        self.ymid = (self.ymin + self.ymax) // 2
 
     def add(self, particle):
-        if len(self.particles) < P_LIMIT:
-            self.particles.add(particle)
-        else:
-            if not self.children:
+        if not self.children:
+            if len(self.particles) >= P_LIMIT:
                 self.split()
+                self.add(particle)
+            else:
+                self.particles.add(particle)
+        else:
+            quadrant = self.quadrant(particle)
+            if quadrant < 0:
+                self.particles.add(particle)
+            else:
+                self.children[quadrant].add(particle)
 
     def split(self):
         ''' creates child nodes for quadrants '''
-        xmid = (self.xmin + self.xmax) // 2
-        ymid = (self.ymin + self.ymax) // 2
-        ul = Node(self.xmin, xmid, self.ymin, ymid)
-        ur = Node(xmid, self.xmax, self.ymin, ymid)
-        lr = Node(xmid, self.xmax, ymid, self.ymax)
-        ll = Node(self.xmin, xmid, ymid, self.ymax)
+        ul = Node(self.xmin, self.xmid, self.ymin, self.ymid)
+        ur = Node(self.xmid, self.xmax, self.ymin, self.ymid)
+        lr = Node(self.xmid, self.xmax, self.ymid, self.ymax)
+        ll = Node(self.xmin, self.xmid, self.ymid, self.ymax)
         self.children = [ul, ur, lr, ll]
 
     def quadrant(self, particle):
-        pass
+        '''Returns index of quadrant for particle in children array.
+           Returns -1 if particle straddles the line.
+        '''
+
+        if abs(particle.coord[0] - self.xmid) < particle.radius or \
+           abs(particle.coord[1] - self.ymid) < particle.radius:
+            return -1
+
+        if 0 < particle.coord[0] < self.xmid:
+            return 0 if 0 < particle.coord[1] < self.ymid else 3
+        else:
+            return 1 if 0 < particle.coord[1] < self.ymid else 2
 
 
 class Quadtree:
