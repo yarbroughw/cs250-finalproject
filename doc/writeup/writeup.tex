@@ -24,11 +24,196 @@
 \MYTITLE{Final Project Writeup}
 
     \section{Motivation}
+      For our CMPSC 250 Final Project, we decided to implement the
+      quadtree data structure and apply it to 2D collision detection, to
+      evaluate the performance gains offered by using spatial indexing
+      to reduce computation over a brute-force algorithm. Collision
+      detection is commonly used in simulation environments, to detect
+      if two objects are colliding (and to subsequently apply some
+      computation to the objects in question). As such, we chose to
+      visualize the efficiency of our quadtree implementation by
+      rendering a 2D environment of particles to the screen.
+      \par This project employs a similar scheme to the lab assignments
+      given in the course, as we implemented a brute-force, inefficient
+      solution to the issue of collision detection in a 2D plane, and
+      improved upon this solution (in this case, using a data
+      structure). We also wanted to gain experience using rendering
+      libraries, as well as the “model-view-controller” design pattern
+      for structuring our simulation.
+
     \section{Background}
+      Quadtrees were first developed by Raphael Finkel and Jon Louis
+      Bentley in 1974. Their original purpose was the retrieval of
+      “composite keys” -- keys in a symbol table with multiple
+      components -- by treating the range of key values as points in a
+      2D space. While the application of Quadtrees to symbols table
+      lookup algorithms did not catch on, they remained an efficient,
+      simple way to spatially index a set of objects. A year later,
+      Bentley abstracted the concept of quadtrees to arbitrary
+      dimensions with the development of the K-D Tree. Lastly, the use
+      cases of quadtrees are not limited to spatial indexing; for
+      instance, quadtrees can also be used for efficient representation
+      of 2D bitmaps.
+
+    \section{Simulation Model}
+      Each particle in our simulation contains a location and a velocity
+      vector, as well as a radius. The world class contains a list of
+      these particles, maximum x and y values for the bounds of the
+      world, and a function for stepping all of its particles (adding
+      the velocity vector to the location vector). The world also
+      enforces its bounds by reflecting the velocity vectors of its
+      particles if the particles exceed the bounds.
+
     \section{Algorithms \& Complexity}
+      \subsection{Collision Primitive}
+	collision() is the function that we use to determine whether or
+	not two objects are colliding with each other. Informally, we
+	compute the distance between the two circles, and then see if
+	the radii of the points are overlapping. If so, then we have
+	detected a collision.
+	\par Clearly, the runtime of collision() is a constant time
+	operation--though we compute the vector norm to compute
+	distance, and computing the norm is an $O(n)$ operation, we
+	argue that the function is still constant time since the size of
+	$n$ does not vary in our use case.
+
+      \subsection{Brute Force}
+	Our brute-force collision detection algorithm loops through the
+	list of particles in a World instance. We use the
+	\texttt{combinations()} function in the popular Python library
+	\texttt{itertools} to take all distinct combinations of
+	particles $p_i$ and $p_j$. As discussed in class, the number of
+	such combinations is ${n \choose 2}$, where $n$ is the number of
+	particles in the simulation. For each pair, we call the
+	\texttt{colliding()} function, and if this call returns True, we
+	set the ``colliding’’ attributes of $p_i$ and $p_j$ to True.
+	Python code for this algorithm can be found in
+	Figure~\ref{figure:brute}.
+
+	\par Brute force collision detection works well for small input
+	values. We found that performance with 50 moving objects was
+	satisfactory. After 100 objects are spawned, however, the
+	framerate slows down noticeably. At $N = 200$, the simulation
+	slows to a crawl. For real-time applications with lots of
+	objects, this would make brute force collision detection
+	unusable.
+
+      \subsection{Quadtree}
+	By contrast, our quadtree collision detection algorithm uses the
+	world to instantiate a quadtree containing all of the particles.
+	To tell if a particle $p_k$ is currently colliding with another,
+	we recurse downward into the quadtree from the root node to the
+	lowest containing node for $p_k$. Each of the nodes encountered
+	along this path has a list of particles, and for each of these
+	particles $p_j$ we call \texttt{colliding($p_k$, $p_j$)} and set
+	the colliding attribute to true if it returns True.  Python code
+	for this algorithm can be found in Figure~\ref{figure:quadtree}.
+
+	\par We argue that the quadtree performs in $O(n*log(n))$ time.
+	Our quadtree implementation has superior experimental
+	performance in comparison to the brute force solution. As shown
+	in our data, the quadtree handles $N = 200$ easily, maintaining
+	a high framerate.  Though our quadtree implementation is
+	considerably faster than the brute force collision detection, it
+	falls short of the potential theoretical performance gains. We
+	attribute this to a number of factors, not the least of which is
+	how the quadtree is reconstructed on every frame, completely
+	sans caching. In addition, we are copying more information than
+	necessary into the tree. Lastly, the expressiveness and
+	terseness of Python’s syntax comes at a cost: there is high
+	computational overhead in comparison to compiled languages.
+
+
+    \begin{figure}[hb]
+      \begin{minted}[linenos, numbersep=5pt,
+	frame=lines, framesep=2mm]{python}
+def brute_check(world):
+    for p in world.particles:
+	p.collide = False
+    for (p1, p2) in combinations(world.particles, 2):
+	if colliding(p1, p2):
+	    p1.collide = True
+	    p2.collide = True
+      \end{minted}
+      \caption{The brute force collision detector algorithm.}
+      \label{figure:brute}
+    \end{figure}
+
+    \begin{figure}
+      \begin{minted}[linenos, numbersep=5pt,
+	frame=lines, framesep=2mm]{python}
+def quadtree_check(world):
+    for p in world.particles:
+	p.collide = False
+
+    qt = Quadtree(world)
+
+    for p in world.particles:
+	current = qt.root
+	while True:
+	    if current.hasColliding(p):
+		p.collide = True
+	    if current.children is not None:
+		current = current.children[current.quadrant(p)]
+	    else:
+		break
+      \end{minted}
+      \caption{The quadtree collision detector algorithm.}
+      \label{figure:quadtree}
+    \end{figure}
+
     \section{Implementation}
-    \section{Result}
+      \subsection{Pygame}
+	All rendering was handled by the \texttt{pygame} library.
+	\texttt{pygame} abstracts away (some) of the complications of
+	rendering graphics. In particular, it saved us the trouble of
+	working with the Python OpenGL interface, which has had some
+	%TODO
+
+      \subsection{Model-View-Controller}
+	We separated the implementation of our demo into several
+	different components using the MVC design pattern. Code that
+	handles rendering the simulation is in \texttt{front.py}, logic
+	related to the current state of the simulation is in
+	\texttt{model.py}, and code that facilitates communication
+	between the frontend and the backend is stored in
+	\texttt{controller.py}. In addition to making the code better
+	organized, this also made it easier for us to collaborate, as
+	the modular nature of this design pattern allowed us to split
+	our development up into the three facets of the program.
+
+      \subsection{cProfile}
+	All profiling is facilitated by the cProfile library, which is
+	packaged with Python out of the box. cProfile offers information
+	on the number of executions of Python functions and the cumulative
+	time spent executing those functions. We found this library very
+	amenable to the task of analyzing the performance of our
+	simulation in a fine-grained way. The timing technique used in
+	this class's labs was ``integration''-style timing, while
+	cProfile, as a proper profiling tool, offers ``unit''-style
+	timing.
+
+      \subsection{Git Branches}
+	We also acquainted ourselves with the use of branches for
+	collaborative development for this project. For instance, one of
+	us would edit the MVC's model on the ``model'' branch, while the
+	other would make necessary changes to the view on the ``gui''
+	branch. Combining the resultant code was a matter of merging our
+	branches together, rather that performing automerges due to
+	conflicting commits on our separate development machines. In our
+	view, this followed one of the core tenets of Git: ``Branch
+	early, branch often.''
+
+    \section{Results}
+
     \section{Conclusion}
+	Note that, in spite of our admittedly inefficient quadtree
+	implementation, performance was still vastly superior to brute
+	force detection.  Even reconstructing, redrawing, and traversing
+	a quad-tree is way better than the naive approach. This shows
+	that, in this case, a clever algorithm trumps a highly optimized
+	implementation. There is simply no substitute for a less-complex
+	algorithm.
 
     \section{References}
       \bibliographystyle{plain}
