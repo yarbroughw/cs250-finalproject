@@ -25,35 +25,34 @@
 
     \section{Motivation}
       For our CMPSC 250 Final Project, we decided to implement the
-      quadtree data structure and apply it to 2D collision detection, to
+      quadtree data structure and apply it to 2D collision detection to
       evaluate the performance gains offered by using spatial indexing
       to reduce computation over a brute-force algorithm. Collision
       detection is commonly used in simulation environments, to detect
       if two objects are colliding (and to subsequently apply some
       computation to the objects in question). As such, we chose to
       visualize the efficiency of our quadtree implementation by
-      rendering a 2D environment of particles to the screen.
-      \par This project employs a similar scheme to the lab assignments
-      given in the course, as we implemented a brute-force, inefficient
-      solution to the issue of collision detection in a 2D plane, and
-      improved upon this solution (in this case, using a data
-      structure). We also wanted to gain experience using rendering
-      libraries, as well as the “model-view-controller” design pattern
-      for structuring our simulation.
+      rendering a 2D environment of particles to the screen.  \par This
+      project employs a similar scheme to the lab assignments given in
+      the course, as we implemented a brute-force, inefficient solution
+      to the issue of collision detection in a 2D plane, and improved
+      upon this solution (in this case, using a data structure). We also
+      wanted to gain experience using rendering libraries, as well as
+      the “model-view-controller” design pattern for structuring our
+      simulation.
 
     \section{Background}
       Quadtrees were first developed by Raphael Finkel and Jon Louis
       Bentley in 1974. Their original purpose was the retrieval of
       “composite keys” -- keys in a symbol table with multiple
       components -- by treating the range of key values as points in a
-      2D space. While the application of Quadtrees to symbols table
-      lookup algorithms did not catch on, they remained an efficient,
-      simple way to spatially index a set of objects. A year later,
-      Bentley abstracted the concept of quadtrees to arbitrary
-      dimensions with the development of the K-D Tree. Lastly, the use
-      cases of quadtrees are not limited to spatial indexing; for
-      instance, quadtrees can also be used for efficient representation
-      of 2D bitmaps.
+      2D space. While the application of Quadtrees to symbol table
+      lookup algorithms did not catch on, they remained an efficient way
+      to spatially index a set of objects. A year later, Bentley
+      abstracted the concept of quadtrees to arbitrary dimensions with
+      the development of the K-D Tree. Lastly, the uses of quadtrees are
+      not limited to spatial indexing; for instance, quadtrees can also
+      be used for efficient representation of 2D bitmaps.
 
     \section{Simulation Model}
       Each particle in our simulation contains a location and a velocity
@@ -62,20 +61,41 @@
       world, and a function for stepping all of its particles (adding
       the velocity vector to the location vector). The world also
       enforces its bounds by reflecting the velocity vectors of its
-      particles if the particles exceed the bounds.
+      particles if the particles exceed the bounds. Images of our
+      simulation can be found in Figures~\ref{figure:simbrute} and
+      ~\ref{figure:simquad}.
+
+      \begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{./img/sim2}
+	\caption{Simulation running with brute-force collision
+	detection.}
+	\label{figure:simbrute}
+      \end{figure}
+
+      \begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{./img/sim3}
+	\caption{Simulation running with quadtree collision
+	detection. The quadtree's boundaries are being drawn to
+	demonstrate the depth of the quadtree's ``splits''.}
+	\label{figure:simquad}
+      \end{figure}
 
     \section{Algorithms \& Complexity}
       \subsection{Collision Primitive}
-	collision() is the function that we use to determine whether or
-	not two objects are colliding with each other. Informally, we
-	compute the distance between the two circles, and then see if
-	the radii of the points are overlapping. If so, then we have
-	detected a collision.
-	\par Clearly, the runtime of collision() is a constant time
-	operation--though we compute the vector norm to compute
-	distance, and computing the norm is an $O(n)$ operation, we
-	argue that the function is still constant time since the size of
-	$n$ does not vary in our use case.
+	In order to detect if two particles are colliding, we require
+	some primitive function to use in all collision detection
+	contexts. In our case, we wrote the function
+	\texttt{colliding()}. Informally, we compute the distance
+	between the two circles, and then see if the radii of the points
+	are overlapping. If so, then we have detected a collision.
+	Clearly, the runtime of collision() is a constant time operation
+	--- though we calculate the vector norm to compute distance, and
+	computing the norm is an $O(n)$ operation, we argue that the
+	function is still constant time since the size of $n$ does not
+	vary in our use case (as the number of components of the input
+	vectors will always be two).
 
       \subsection{Brute Force}
 	Our brute-force collision detection algorithm loops through the
@@ -167,8 +187,8 @@ def quadtree_check(world):
 	All rendering was handled by the \texttt{pygame} library.
 	\texttt{pygame} abstracts away (some) of the complications of
 	rendering graphics. In particular, it saved us the trouble of
-	working with the Python OpenGL interface, which has had some
-	%TODO
+	working with the Python OpenGL interface, which caused us many
+	difficulties during the early stages of our project.
 
       \subsection{Model-View-Controller}
 	We separated the implementation of our demo into several
@@ -205,19 +225,57 @@ def quadtree_check(world):
 	early, branch often.''
 
     \section{Results}
+      In Figure~\ref{figure:graphs}, we can see the difference in
+      scaling between the brute-force method and the quadtree method.
+      The former scales rapidly, and by 500 particles results in a poor
+      framerate. However, the scaling of the quadtree-based collision
+      detection method is far more gentle, and though the latency of the
+      \texttt{check()} call is still visible in the framerate for 500
+      particles, it is far faster than that of the brute-force method.
 
+      \begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{./img/graphs}
+	\caption{Graphs of brute-force and quadtree collision detection
+	performance over number of particles in simulation. The y-axis
+	represents the average execution time of the call to the
+	\texttt{check()} method (taken from cProfile).}
+	\label{figure:graphs}
+      \end{figure}
+
+    \newpage
     \section{Conclusion}
-	Note that, in spite of our admittedly inefficient quadtree
-	implementation, performance was still vastly superior to brute
-	force detection.  Even reconstructing, redrawing, and traversing
-	a quad-tree is way better than the naive approach. This shows
-	that, in this case, a clever algorithm trumps a highly optimized
-	implementation. There is simply no substitute for a less-complex
-	algorithm.
-
-    \section{References}
-      \bibliographystyle{plain}
-      \bibliography{../assets/references}
+	We had a number of challenges and takeaways from completing this
+	project:
+	\begin{itemize}
+	  \item Originally, we intended to write a 3D simulation using
+	    an Octtree (the 3D analogue of a quadtree). However, we
+	    faced difficulties using the Python OpenGL bindings,
+	    especially given the multitude of development platforms we
+	    were using for construction of the simulation. As a result
+	    of these difficulties, we chose to reduce the scope of our
+	    project to 2D and use a more ``Pythonic'' library for
+	    rendering. This proved to be a wise choice: without the
+	    constant hassle of 3D rendering, we were able to focus on
+	    the details of algorithm implementation and analysis.
+	  \item In spite of our admittedly inefficient
+	    quadtree implementation, performance was still vastly
+	    superior to brute force detection.  Even reconstructing,
+	    redrawing, and traversing a quad-tree is way better than the
+	    naive approach. This shows that, in this case, a clever
+	    algorithm trumps a highly optimized implementation. There is
+	    simply no substitute for a less-complex algorithm.
+	  \item One lesson we learned is how much one poor design
+	    decision can cascade into even more problems. This is
+	    exemplified by our choice to have our choice of collision
+	    detection algorithm chosen in \texttt{controller.py}, which
+	    ended up making it very difficult for the frontend to
+	    ``talk’’ with the quadtree. Since we needed access to the
+	    state of the quadtree in order to draw it, we should have
+	    instead opted to instantiate it inside of the world. We
+	    ended up doing a number of ugly kludges to get around this,
+	    including modifying frame drawing logic in dangerous ways.
+	\end{itemize}
 
 \end{document}
 
